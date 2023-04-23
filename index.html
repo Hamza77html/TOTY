@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <meta charset="UTF-8" />
+
+    <title>Calculator</title>
+
+    <style>
+
+      * {
+
+        box-sizing: border-box;
+
+        font-family: Arial, sans-serif;
+
+      }
+
+      .calculator {
+
+        max-width: 500px;
+
+        margin: auto;
+
+        text-align: center;
+
+      }
+
+      .form {
+
+        display: none;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        height: 200px;
+
+      }
+
+      .form.active {
+
+        display: flex;
+
+      }
+
+      .form label {
+
+        margin-bottom: 10px;
+
+      }
+
+      .form input[type="text"] {
+
+        padding: 10px;
+
+        margin-bottom: 20px;
+
+        width: 100%;
+
+        border: 1px solid #ccc;
+
+        border-radius: 5px;
+
+        font-size: 16px;
+
+      }
+
+      .form button {
+
+        padding: 10px;
+
+        background-color: #007bff;
+
+        color: #fff;
+
+        border: none;
+
+        border-radius: 5px;
+
+        cursor: pointer;
+
+        font-size: 16px;
+
+      }
+
+      .form button:hover {
+
+        background-color: #0069d9;
+
+      }
+
+      .form .gender {
+
+        display: flex;
+
+        margin-bottom: 20px;
+
+      }
+
+      .form .gender button {
+
+        padding: 10px;
+
+        margin-right: 10px;
+
+        background-color: #ccc;
+
+        border: none;
+
+        border-radius: 5px;
+
+        cursor: pointer;
+
+        font-size: 16px;
+
+      }
+
+      .form .gender button.active {
+
+        background-color: #007bff;
+
+        color: #fff;
+
+      }
+
+      .result {
+
+        display: none;
+
+        margin-top: 20px;
+
+      }
+
+      .result.active {
+
+        display: block;
+
+      }
+
+      .result h2 {
+
+        margin-bottom: 10px;
+
+      }
+
+      .result p {
+
+        margin-bottom: 20px;
+
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="calculator">
+
+      <div class="form active">
+
+        <label for="age">Age:</label>
+
+        <input type="text" id="age" />
+
+        <div class="gender">
+
+          <button class="male">Male</button>
+
+          <button class="female">Female</button>
+
+        </div>
+
+        <button class="next">Next</button>
+
+      </div>
+
+      <div class="form">
+
+        <label for="height">Height (cm):</label>
+
+        <input type="text" id="height" />
+
+        <label for="weight">Weight (kg):</label>
+
+        <input type="text" id="weight" />
+
+        <button class="next">Next</button>
+
+      </div>
+
+      <div class="form">
+
+        <label for="activity">Activity level:</label>
+
+        <select id="activity">
+
+          <option value="1.2">Sedentary (little or no exercise)</option>
+
+          <option value="1.375">Lightly active (light exercise or sports 1-3 days a week)</option>
+
+          <option value="1.55">Moderately active (moderate exercise or sports 3-5 days a week)</option>
+
+          <option value="1.725">Very active (hard exercise or sports 6-7 days a week)</option>
+
+          <option value="1.9">Extra active (very hard) </option>
+          </span> calories per day.</p>
+
+<p>To gain weight, you should consume <span id="gain"></span> calories per day.</p>
+
+<p>These are just estimates. Please consult with a healthcare professional before making any dietary or exercise changes.</p>
+
+</div>
+
+</div>
+<script>
+
+  const form = document.querySelectorAll(".form");
+
+  const nextBtn = document.querySelectorAll(".next");
+
+  const maleBtn = document.querySelector(".male");
+
+  const femaleBtn = document.querySelector(".female");
+
+  const activity = document.querySelector("#activity");
+
+  const bmrSpan = document.querySelector("#bmr");
+
+  const tdeeSpan = document.querySelector("#tdee");
+
+  const maintainSpan = document.querySelector("#maintain");
+
+  const loseSpan = document.querySelector("#lose");
+
+  const gainSpan = document.querySelector("#gain");
+
+  let age, gender, height, weight, activityLevel, bmr, tdee, maintain, lose, gain;
+
+  function calculateBMR() {
+
+    if (gender === "male") {
+
+      bmr = 88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age);
+
+    } else {
+
+      bmr = 447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age);
+
+    }
+
+    return bmr.toFixed(2);
+
+  }
+
+  function calculateTDEE() {
+
+    tdee = bmr * activityLevel;
+
+    return tdee.toFixed(2);
+
+  }
+
+  function calculateCalories() {
+
+    maintain = tdee.toFixed(2);
+
+    lose = (tdee - 500).toFixed(2);
+
+    gain = (tdee + 500).toFixed(2);
+
+  }
+
+  function showResults() {
+
+    bmrSpan.innerText = calculateBMR();
+
+    tdeeSpan.innerText = calculateTDEE();
+
+    maintainSpan.innerText = maintain;
+
+    loseSpan.innerText = lose;
+
+    gainSpan.innerText = gain;
+
+  }
+
+  nextBtn.forEach((btn, index) => {
+
+    btn.addEventListener("click", () => {
+
+      form[index].classList.remove("active");
+
+      form[index + 1].classList.add("active");
+
+      if (index === 0) {
+
+        age = parseInt(document.querySelector("#age").value);
+
+        gender = document.querySelector(".gender button.active").classList.contains("male") ? "male" : "female";
+
+      } else if (index === 1) {
+
+        height = parseInt(document.querySelector("#height").value);
+
+        weight = parseInt(document.querySelector("#weight").value);
+
+      } else if (index === 2) {
+
+        activityLevel = parseFloat(activity.value);
+
+        bmr = calculateBMR();
+
+        tdee = calculateTDEE();
+
+        calculateCalories();
+
+        showResults();
+
+      }
+
+    });
+
+  });
+
+  maleBtn.addEventListener("click", () => {
+
+    maleBtn.classList.add("active");
+
+    femaleBtn.classList.remove("active");
+
+  });
+
+  femaleBtn.addEventListener("click", () => {
+
+    femaleBtn.classList.add("active");
+
+    maleBtn.classList.remove("active");
+
+  });
+
+</script>
+
+</body>
+</html>
+
